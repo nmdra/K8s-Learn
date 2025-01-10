@@ -1,0 +1,24 @@
+# Sidecar container example 1
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-example
+spec:
+  shareProcessNamespace: true  # Enable PID namespace sharing
+  containers:
+  - name: primary-app
+    image: nginx:stable-alpine  # Primary application container (nginx)
+    ports:
+    - containerPort: 80
+  - name: sidecar
+    image: alpine:latest  # Alpine container for process monitoring
+    command:
+      - sh
+      - -c
+      - |
+        apk add --no-cache procps  # Install procps to get the 'ps' command
+        while true; do
+          echo "Process count of primary container:" && ps aux | grep nginx | grep -v grep | wc -l;
+          sleep 5;
+        done
