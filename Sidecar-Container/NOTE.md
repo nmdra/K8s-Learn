@@ -13,7 +13,8 @@ When a **sidecar container** shares the **process ID (PID) namespace** with the 
 
 ### On Docker
 
-> [!info] PID Namespace
+> [!tip]    
+> **PID Namespace**
 > A **PID namespace** is a Linux kernel feature that isolates the process IDs (PIDs) for a group of processes. Containers typically use their own PID namespace to ensure process isolation, meaning each container has its own independent set of process IDs.
 > 
 > However, when two containers share the same PID namespace:
