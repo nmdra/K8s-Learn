@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: demo-job
+spec:
+  parallelism: 9
+  completions: 9
+  template:
+    metadata:
+      labels:
+         test: jobs
+    spec:
+      containers:
+        - name: demo-job
+          image: busybox:latest
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c", "echo 'Running job';"]
+      restartPolicy: Never
