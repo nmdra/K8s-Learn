@@ -1,16 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# https://akos.ma/blog/vagrant-k3s-and-virtualbox/
+# Based on: https://akos.ma/blog/vagrant-k3s-and-virtualbox/
 
 server_ip = "192.168.56.25"
 
 agents = { "agent1" => "192.168.56.26",
            "agent2" => "192.168.56.27" }
-
-# Extra parameters in INSTALL_K3S_EXEC variable because of
-# K3s picking up the wrong interface when starting server and agent
-# https://github.com/alexellis/k3sup/issues/306
 
 server_script = <<-SHELL
     sudo -i
@@ -39,6 +35,8 @@ agent_script = <<-SHELL
 
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/debian-12"
+  config.vm.box_version = "202407.22.0"
+  config.vm.box_check_update = false
 
   config.vm.define "server", primary: true do |server|
     server.vm.network "private_network", ip: server_ip
