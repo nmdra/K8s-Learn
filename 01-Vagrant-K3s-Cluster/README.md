@@ -1,5 +1,8 @@
 ## Create K3s Cluster with Vagrant and VirtualBox
 
+
+Differences between K8s and K3s : 👉 [K8s-and-K3s.md](./K8s-and-K3s.md)
+
 ### Prerequisites:
 
 1. **Install Vagrant** – Follow the [Vagrant Install Guide](https://phoenixnap.com/kb/how-to-install-vagrant-on-ubuntu).
