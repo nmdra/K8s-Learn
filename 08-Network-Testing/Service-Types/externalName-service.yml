@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: externalname-service
+spec:
+  type: ExternalName  # This specifies the ExternalName service type
+  externalName: httpbingo.org  # The external DNS name to map to
+

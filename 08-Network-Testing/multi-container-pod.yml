@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-container-pod 
+  labels:
+    app: httpbin
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: httpbin
+  template:
+    metadata:
+      labels:
+        app: httpbin
+    spec:
+      containers:
+        - name: curl
+          image: "curlimages/curl:latest"
+          command: ["sleep", "30d"]
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+        - name: httpbin
+          image: "mccutchen/go-httpbin:latest"
+          imagePullPolicy: IfNotPresent

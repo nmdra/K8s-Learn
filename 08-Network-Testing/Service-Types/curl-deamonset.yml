@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: curl-daemonset
+  labels:
+    app: curl
+spec:
+  selector:
+    matchLabels:
+      app: curl
+  template:
+    metadata:
+      labels:
+        app: curl
+    spec:
+      containers:
+      - name: curl
+        image: curlimages/curl:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - sleep
+        - "86400" # Keeps the Pod running for debugging
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
