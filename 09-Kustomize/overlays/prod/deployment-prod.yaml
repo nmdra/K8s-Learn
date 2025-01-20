@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 3 # Update the replica count to 3
+  template:
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:stable-alpine # Add an image for the container
+          resources:
+            limits:
+              cpu: "200m" # Lower CPU limit to 200m (0.2 CPU cores)
+              memory: "256Mi" # Lower memory limit to 256 MiB
+            requests:
+              cpu: "100m" # Lower CPU request to 100m (0.1 CPU cores)
+              memory: "128Mi" # Lower memory request to 128 MiB
+          volumeMounts:
+            - name: nginx-default-page
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+      volumes:
+        - name: nginx-default-page
+          configMap:
+            name: nginx-default-page-config
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1

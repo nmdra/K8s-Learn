@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-default-page-config
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Welcome to NGINX!</title>
+    </head>
+    <body>
+        <h1>Hello from the Base Configuration!</h1>
+    </body>
+    </html>

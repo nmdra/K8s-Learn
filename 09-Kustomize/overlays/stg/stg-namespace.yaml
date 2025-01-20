@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: stg-ns
+  labels:
+    env: staging 
+  annotations:
+    description: "This is the staging namespace"
