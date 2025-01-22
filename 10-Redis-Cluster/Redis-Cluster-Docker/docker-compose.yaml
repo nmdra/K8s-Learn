@@ -1,0 +1,73 @@
+services:
+  redis-node-1:
+    image: redis:alpine
+    container_name: redis-node-1
+    ports:
+      - "7001:6379"
+    networks:
+      - redis-cluster
+    volumes:
+      - ./data/node-1:/data
+    environment:
+      - REDIS_CLUSTER=yes
+      - REDIS_PASSWORD=strongPassword
+    command: ["redis-server", "--port", "6379", "--cluster-enabled", "yes", "--cluster-config-file", "/data/nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+
+  redis-node-2:
+    image: redis:alpine
+    container_name: redis-node-2
+    ports:
+      - "7002:6379"
+    networks:
+      - redis-cluster
+    volumes:
+      - ./data/node-2:/data
+    command: ["redis-server", "--port", "6379", "--cluster-enabled", "yes", "--cluster-config-file", "/data/nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+
+  redis-node-3:
+    image: redis:alpine
+    container_name: redis-node-3
+    ports:
+      - "7003:6379"
+    networks:
+      - redis-cluster
+    volumes:
+      - ./data/node-3:/data
+    command: ["redis-server", "--port", "6379", "--cluster-enabled", "yes", "--cluster-config-file", "/data/nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+
+  redis-node-4:
+    image: redis:alpine
+    container_name: redis-node-4
+    ports:
+      - "7004:6379"
+    networks:
+      - redis-cluster
+    volumes:
+      - ./data/node-4:/data
+    command: ["redis-server", "--port", "6379", "--cluster-enabled", "yes", "--cluster-config-file", "/data/nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+
+  redis-node-5:
+    image: redis:alpine
+    container_name: redis-node-5
+    ports:
+      - "7005:6379"
+    networks:
+      - redis-cluster
+    volumes:
+      - ./data/node-5:/data
+    command: ["redis-server", "--port", "6379", "--cluster-enabled", "yes", "--cluster-config-file", "/data/nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+
+  redis-node-6:
+    image: redis:alpine
+    container_name: redis-node-6
+    ports:
+      - "7006:6379"
+    networks:
+      - redis-cluster
+    volumes:
+      - ./data/node-6:/data
+    command: ["redis-server", "--port", "6379", "--cluster-enabled", "yes", "--cluster-config-file", "/data/nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+
+networks:
+  redis-cluster:
+    driver: bridge
