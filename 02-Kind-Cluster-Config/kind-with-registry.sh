@@ -27,17 +27,15 @@ nodes:
   image: kindest/node:v1.30.6
   extraPortMappings:
   - containerPort: 80
-    hostPort: 80
-  - containerPort: 443
-    hostPort: 443
-  - containerPort: 30001
     hostPort: 8080
+  - containerPort: 443
+    hostPort: 8443
+  - containerPort: 30001
+    hostPort: 8081
   - containerPort: 30002
     hostPort: 8082
   - containerPort: 30003
     hostPort: 8083
-  - containerPort: 30004
-    hostPort: 8084
 - role: worker
   image: kindest/node:v1.30.6
 
