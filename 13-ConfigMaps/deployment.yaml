@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: env-reader-deployment
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: env-reader
+  template:
+    metadata:
+      labels:
+        app: env-reader
+    spec:
+      containers:
+      - name: env-reader
+        image: ghcr.io/nmdra/k8s-learn/env-reader:2.0
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: app-config

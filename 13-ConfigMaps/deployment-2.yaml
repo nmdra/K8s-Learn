@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: env-reader-2
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: env-reader-2
+  template:
+    metadata:
+      labels:
+        app: env-reader-2
+    spec:
+      containers:
+      - name: env-reader-2
+        image: ghcr.io/nmdra/k8s-learn/env-reader:2.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: app-config  
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config  
+          readOnly: true  
+      volumes:
+      - name: config-volume
+        configMap:
+          name: new-config  
