@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: downward-api-test
+spec:
+  template:
+    metadata:
+      labels:
+        env: testing
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: downward-api-test
+          image: alpine:latest
+          command: [ "sh", "-c", "echo Namespace: $POD_NAMESPACE" ]
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace

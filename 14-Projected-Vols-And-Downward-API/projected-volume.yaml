@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-config
+data:
+  app.properties: |
+    key1=value1
+    key2=value2
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: example-secret
+type: Opaque
+data:
+  username: dXNlcm5hbWU=  
+  password: cGFzc3dvcmQ=  
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: projected-volume-job
+spec:
+  template:
+    metadata:
+      name: projected-volume-job
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: app-container
+          image: alpine:latest
+          command: ["/bin/sh", "-c", "ls -l /projected-vol && cat /projected-vol/*"]
+          volumeMounts:
+            - name: projected-volume
+              mountPath: "/projected-vol"
+              readOnly: true
+      volumes:
+        - name: projected-volume
+          projected:
+            sources:
+              - configMap:
+                  name: example-config
+              - secret:
+                  name: example-secret
+              - downwardAPI:
+                  items:
+                    - path: "pod_name"
+                      fieldRef:
+                        fieldPath: metadata.name
+                    - path: "namespace"
+                      fieldRef:
+                        fieldPath: metadata.namespace
+                    - path: "labels"
+                      fieldRef:
+                        fieldPath: metadata.labels
+              - serviceAccountToken:
+                  path: "sa-token"
+                  expirationSeconds: 3600

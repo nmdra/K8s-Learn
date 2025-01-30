@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: downward-api-job
+spec:
+  template:
+    metadata:
+      labels:
+        region: Asia 
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: labels
+          downwardAPI:
+            items:
+              - path: "labels"
+                fieldRef:
+                  fieldPath: metadata.labels
+      containers:
+        - name: downward-api-container
+          image: alpine:latest
+          command: ["sh", "-c", "echo Namespace: $MY_NAMESPACE && echo Labels: && cat /etc/pod/labels"]
+          env:
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: labels
+              mountPath: /etc/pod
+
