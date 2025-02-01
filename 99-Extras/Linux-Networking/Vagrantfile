@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+host_ip = "192.168.56.40"
+
+server_script = <<-SHELL
+    # Update package lists and install required dependencies
+    sudo apt-get update
+    sudo apt-get install -y curl dnsutils ca-certificates
+
+    # Create the keyrings directory and add Docker’s GPG key
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add Docker’s repository
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+    # Update package lists again
+    sudo apt-get update
+
+    # Install Docker and related packages
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # Add vagrant user to the Docker group
+    sudo usermod -aG docker vagrant
+
+    # Enable and start Docker services
+    sudo systemctl enable --now docker.service
+    sudo systemctl enable --now containerd.service
+SHELL
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/debian-12"
+  config.vm.box_version = "202407.22.0"
+  config.vm.box_check_update = false
+
+  config.vm.define "server", primary: true do |server|
+    server.vm.network "private_network", ip: host_ip
+    server.vm.synced_folder "./Shared", "/vagrant_shared"
+    server.vm.hostname = "network-testing"
+    server.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.cpus = "1"
+    end
+    server.vm.provision "shell", inline: server_script
+  end
+end
