@@ -20,3 +20,9 @@ spec:
     - name: whoami
       namespace: default
       port: 80
+      weight: 50
+    - name: whoami-canary 
+      namespace: default 
+      port: 80 
+      weight: 10
+

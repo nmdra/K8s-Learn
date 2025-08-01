@@ -637,6 +637,10 @@ env: []
 envFrom: []
 
 ports:
+  grpc:
+    port: 50051
+    exposedPort: 50051
+    nodePort: 30003
   traefik:
     port: 8080
     # -- Use hostPort if set.

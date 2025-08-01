@@ -4,18 +4,20 @@ metadata:
   name: whoami
   namespace: default
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: whoami
+      version: stable
   template:
     metadata:
       labels:
         app: whoami
+        version: stable
     spec:
       containers:
       - name: whoami
-        image: traefik/whoami
+        image: traefik/whoami:v1.10
         ports:
         - containerPort: 80
 ---
@@ -27,6 +29,7 @@ metadata:
 spec:
   selector:
     app: whoami
+    version: stable
   ports:
   - port: 80
     name: whoami

@@ -1,0 +1,31 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: greet
+  namespace: default
+spec:
+  parentRefs:
+    - name: traefik              
+      sectionName: grpc          
+      kind: Gateway
+
+  hostnames:
+    - greet.localhost            
+
+  rules:
+    - matches:
+        - method:
+            type: Exact
+            service: grpc.reflection.v1alpha.ServerReflection
+        - method:
+            type: Exact
+            service: greet.GreetService
+            method: SayHello
+        - method:
+            type: Exact
+            service: greet.GreetService
+            method: WhoAmI
+      backendRefs:
+        - name: grpc-server       # Name of Kubernetes Service
+          namespace: default
+          port: 50051             # gRPC service port
