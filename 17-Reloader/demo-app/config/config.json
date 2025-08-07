@@ -1,0 +1,13 @@
+{
+  "app": {
+    "version": "1.0.0",
+    "environment": "production"
+  },
+  "logging": {
+    "level": "info",
+    "format": "json"
+  },
+  "message": {
+    "hello": "Hello! from ConfigMap."
+  }
+}
