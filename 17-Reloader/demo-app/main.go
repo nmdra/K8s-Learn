@@ -22,9 +22,15 @@ type AppConfig struct {
 	} `json:"message"`
 }
 
+type Secret struct {
+	User string `json:"user"`
+	Pass string `json:"pass"`
+}
+
 type Response struct {
 	Message string     `json:"hello"`
 	Config  *AppConfig `json:"config"`
+	Secret  *Secret    `json:"secrets,omitempty"`
 }
 
 func loadConfig(path string) (*AppConfig, error) {
@@ -39,6 +45,13 @@ func loadConfig(path string) (*AppConfig, error) {
 	}
 
 	return &cfg, nil
+}
+
+func loadSecretsFromEnv() *Secret {
+	return &Secret{
+		User: os.Getenv("USER"),
+		Pass: os.Getenv("PASS"),
+	}
 }
 
 func parseLogLevel(level string) slog.Level {
@@ -87,6 +100,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	secrets := loadSecretsFromEnv()
+
 	logger := setupSlog(cfg)
 	logger.Info("Config loaded", "enviroment", cfg.App.Environment, "version", cfg.App.Version)
 
@@ -95,6 +110,7 @@ func main() {
 		resp := Response{
 			Message: "Configuration",
 			Config:  cfg,
+			Secret:  secrets,
 		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(resp)
@@ -116,6 +132,11 @@ func main() {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(resp)
+	})
+
+	http.HandleFunc("/secrets", func(w http.ResponseWriter, r *http.Request) {
+		logger.Info("Handling /secrets", "remote", r.RemoteAddr)
+		json.NewEncoder(w).Encode(secrets)
 	})
 
 	port := "8080"

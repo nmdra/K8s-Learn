@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: app
-          image: nimendra/cmdemo:1.0.0
-          imagePullPolicy: IfNotPresent
+          image: nimendra/cmdemo:2.0.2
+          imagePullPolicy: IfNotPresent #<-- to use locally loaded image
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -31,6 +31,17 @@ spec:
            limits:
               cpu: "500m"
               memory: "256Mi"
+          env:
+            - name: USER
+              valueFrom:
+                secretKeyRef:
+                  name: kube-secret
+                  key: USER
+            - name: PASS
+              valueFrom:
+                secretKeyRef:
+                  name: kube-secret
+                  key: PASS
       volumes:
         - name: config-volume
           configMap:
