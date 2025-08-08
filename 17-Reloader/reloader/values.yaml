@@ -1,0 +1,6 @@
+reloader:
+  autoReloadAll: false
+  # namespaceSelector: "default"
+  ignoreNamespace: kube-system   
+  ignoreSecrets: false
+  ignoreConfigMaps: false

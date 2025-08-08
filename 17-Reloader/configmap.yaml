@@ -3,7 +3,7 @@ data:
   config.json: |
     {
       "app": {
-        "version": "1.0.0",
+        "version": "2.0.2",
         "environment": "production"
       },
       "logging": {
@@ -11,7 +11,7 @@ data:
         "format": "json"
       },
       "message": {
-        "hello": "Hello! from ConfigMap."
+        "hello": "Hello.!! from ConfigMap."
       }
     }
 kind: ConfigMap

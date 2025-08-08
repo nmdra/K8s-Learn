@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: cm-demo
   labels:
-    app: cm-demo 
+    app: cm-demo
+  annotations:
+    reloader.stakater.com/auto: "true" 
 spec:
   replicas: 2
   selector:
