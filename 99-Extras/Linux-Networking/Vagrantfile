@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "linux-lab", primary: true do |server|
     server.vm.network "private_network", ip: host_ip
-    server.vm.synced_folder "./Shared", "/vagrant_shared"
+    # server.vm.synced_folder "./Shared", "/vagrant_shared"
     server.vm.hostname = "network-testing"
     server.vm.provider "virtualbox" do |vb|
       vb.memory = "1024"
