@@ -1,3 +1,6 @@
 [submodule "07-Observability-and-Monitoring"]
 	path = 07-Observability-and-Monitoring
 	url = https://github.com/nmdra/Observability-and-Monitoring-Exercises
+[submodule "02.1-Kind-Cluster-tf"]
+	path = 02.1-Kind-Cluster-tf
+	url = https://github.com/nmdra/kind-cluster-terraform
