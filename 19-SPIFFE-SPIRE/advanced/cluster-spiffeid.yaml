@@ -1,0 +1,11 @@
+# ClusterSPIFFEID — auto-register all pods with the spiffe.io/spiffe-id label
+# Requires: SPIRE Controller Manager
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: default-workloads
+spec:
+  spiffeIDTemplate: "spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}"
+  podSelector:
+    matchLabels:
+      spiffe.io/spiffe-id: "true"
