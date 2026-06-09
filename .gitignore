@@ -2,3 +2,6 @@ k3s.yaml
 token
 .vagrant
 .config
+
+# Agent 
+graphify-out

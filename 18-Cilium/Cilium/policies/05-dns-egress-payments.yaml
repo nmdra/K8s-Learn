@@ -1,0 +1,37 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: payments-dns-egress
+  namespace: bookstore
+spec:
+  endpointSelector:
+    matchLabels:
+      app: payments
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: api-gateway
+      toPorts:
+        - ports:
+            - port: "5002"
+              protocol: TCP
+  egress:
+    # Allow DNS resolution
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: "*.stripe.com"
+    # Allow HTTPS to Stripe only (resolved via DNS above)
+    - toFQDNs:
+        - matchPattern: "*.stripe.com"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

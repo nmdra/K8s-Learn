@@ -1,0 +1,25 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: catalog-l7-readonly
+  namespace: bookstore
+spec:
+  endpointSelector:
+    matchLabels:
+      app: catalog
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: api-gateway
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: "/api/v1/books"
+              - method: GET
+                path: "/api/v1/books/[0-9]+"
+              - method: GET
+                path: "/health"

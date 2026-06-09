@@ -1,0 +1,11 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: default-deny
+  namespace: bookstore
+spec:
+  endpointSelector: {}     # Matches ALL pods in the namespace
+  ingress:
+    - {}                    # This section being empty = deny all ingress
+  egress:
+    - {}                    # Deny all egress

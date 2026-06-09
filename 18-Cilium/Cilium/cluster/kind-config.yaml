@@ -1,0 +1,14 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  disableDefaultCNI: true    # Let Cilium manage CNI
+  kubeProxyMode: none         # Cilium replaces kube-proxy
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 80     # For Cilium Ingress
+        hostPort: 80
+      - containerPort: 443
+        hostPort: 443
+  - role: worker
+  - role: worker

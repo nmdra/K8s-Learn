@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: catalog-db
+  namespace: bookstore
+spec:
+  serviceName: catalog-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog-db
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: catalog-db
+        tier: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: catalog
+            - name: POSTGRES_USER
+              value: catalog_user
+            - name: POSTGRES_PASSWORD
+              value: catalog_pass     # Use Secrets in production
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-db
+  namespace: bookstore
+spec:
+  selector:
+    app: catalog-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+  clusterIP: None   # Headless for StatefulSet
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: orders-db
+  namespace: bookstore
+spec:
+  serviceName: orders-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders-db
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: orders-db
+        tier: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: orders
+            - name: POSTGRES_USER
+              value: orders_user
+            - name: POSTGRES_PASSWORD
+              value: orders_pass
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-db
+  namespace: bookstore
+spec:
+  selector:
+    app: orders-db
+  ports:
+    - port: 5432
+      targetPort: 5432
+  clusterIP: None

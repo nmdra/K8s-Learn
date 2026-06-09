@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  namespace: bookstore
+spec:
+  template:
+    metadata:
+      annotations:
+        kubernetes.io/egress-bandwidth: "10M"    # 10 Mbit/s egress cap
+        kubernetes.io/ingress-bandwidth: "10M"   # 10 Mbit/s ingress cap

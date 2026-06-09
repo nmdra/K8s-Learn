@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+  namespace: bookstore
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: orders
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: orders
+        tier: backend
+    spec:
+      containers:
+        - name: orders
+          image: hashicorp/http-echo:latest
+          args: ["-text=Orders Service"]
+          ports:
+            - containerPort: 5678
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders
+  namespace: bookstore
+  labels:
+    app: orders
+spec:
+  selector:
+    app: orders
+  ports:
+    - port: 5001
+      targetPort: 5678
+      name: http

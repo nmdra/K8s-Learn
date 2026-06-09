@@ -1,0 +1,21 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: deny-cross-service
+  namespace: bookstore
+spec:
+  endpointSelector:
+    matchLabels:
+      tier: backend
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            tier: backend
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+            - port: "5001"
+              protocol: TCP
+            - port: "5002"
+              protocol: TCP

@@ -1,0 +1,11 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: inject-priority-binding
+spec:
+  policyName: inject-priority-class
+  paramRef:
+    name: priority-defaults
+    namespace: default
+    parameterNotFoundAction: Deny
+  matchResources: {}

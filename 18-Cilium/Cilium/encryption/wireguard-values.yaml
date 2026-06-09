@@ -1,0 +1,6 @@
+# Helm values to enable WireGuard (for reference)
+encryption:
+  enabled: true
+  type: wireguard
+  wireguard:
+    userspaceFallback: false

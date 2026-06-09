@@ -1,0 +1,7 @@
+apiVersion: rules.example.com/v1
+kind: ReplicaLimit
+metadata:
+  name: prod-limit
+  namespace: production
+spec:
+  maxReplicas: 10

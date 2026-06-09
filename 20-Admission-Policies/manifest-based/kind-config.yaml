@@ -1,0 +1,23 @@
+# Kind cluster config to enable ManifestBasedAdmissionControlConfig feature gate
+# and mount policy files into the API server.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+featureGates:
+  ManifestBasedAdmissionControlConfig: true
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: ClusterConfiguration
+    apiServer:
+      extraArgs:
+        admission-control-config-file: /etc/kubernetes/admission/admission-config.yaml
+      extraVolumes:
+      - name: admission-policies
+        hostPath: /etc/kubernetes/admission
+        mountPath: /etc/kubernetes/admission
+        readOnly: true
+  extraMounts:
+  - hostPath: ./admission
+    containerPath: /etc/kubernetes/admission
+    readOnly: true

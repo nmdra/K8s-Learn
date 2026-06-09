@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: priority-defaults
+  namespace: default
+data:
+  defaultPriorityClassName: "medium-priority"

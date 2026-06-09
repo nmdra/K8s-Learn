@@ -1,0 +1,15 @@
+# AdmissionConfiguration for manifest-based admission control.
+# Pass to kube-apiserver via --admission-control-config-file
+apiVersion: apiserver.config.k8s.io/v1
+kind: AdmissionConfiguration
+plugins:
+- name: ValidatingAdmissionPolicy
+  configuration:
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: ValidatingAdmissionPolicyConfiguration
+    staticManifestsDir: "/etc/kubernetes/admission/validating-policies/"
+- name: MutatingAdmissionPolicy
+  configuration:
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: MutatingAdmissionPolicyConfiguration
+    staticManifestsDir: "/etc/kubernetes/admission/mutating-policies/"

@@ -1,0 +1,84 @@
+# --- Catalog Service ---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-catalog-policy
+  namespace: bookstore
+spec:
+  endpointSelector:
+    matchLabels:
+      app: catalog
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: api-gateway
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: catalog-db
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+---
+# --- Orders Service ---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-orders-policy
+  namespace: bookstore
+spec:
+  endpointSelector:
+    matchLabels:
+      app: orders
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: api-gateway
+      toPorts:
+        - ports:
+            - port: "5001"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: orders-db
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+---
+# --- Database Ingress ---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-db-ingress
+  namespace: bookstore
+spec:
+  endpointSelector:
+    matchLabels:
+      tier: database
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            tier: backend

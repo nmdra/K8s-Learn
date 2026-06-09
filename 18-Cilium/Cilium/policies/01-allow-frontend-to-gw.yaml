@@ -1,0 +1,48 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-to-gateway
+  namespace: bookstore
+spec:
+  endpointSelector:
+    matchLabels:
+      app: api-gateway
+  ingress:
+    - fromEntities:
+        - world               # Traffic from outside the cluster
+        - cluster              # Traffic from other namespaces (e.g., ingress controller)
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app: catalog
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app: orders
+      toPorts:
+        - ports:
+            - port: "5001"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app: payments
+      toPorts:
+        - ports:
+            - port: "5002"
+              protocol: TCP
+    # Allow DNS resolution
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
